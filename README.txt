@@ -15,3 +15,14 @@
 	工夫した点
 	
 		SVGでグラフが作りやすくなるように、勤務時間をデータ表現する方法を工夫しました。
+		
+	製作期間
+	
+		設計から実装まで三日ほどです。(一日4～5時間）
+		
+		
+サイトのURLは下記になります。
+https://lumpy-cooperative-nightingale.glitch.me
+
+実行確認は下記のURLからできます。
+https://glitch.com/edit/#!/lumpy-cooperative-nightingale
