@@ -22,7 +22,7 @@
 		
 		
 サイトのURLは下記になります。
-https://lumpy-cooperative-nightingale.glitch.me
+https://savory-wide-stingray.glitch.me
 
 実行確認は下記のURLからできます。
-https://glitch.com/edit/#!/lumpy-cooperative-nightingale
+https://glitch.com/edit/#!/savory-wide-stingray
