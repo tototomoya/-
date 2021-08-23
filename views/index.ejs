@@ -1,0 +1,186 @@
+<head>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="index.css">
+  
+
+</head>
+
+<svg id="svg"></svg>
+
+<script>
+  
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  
+  const svg = document.getElementById("svg");
+  svg.setAttribute('width', w);
+  svg.setAttribute('height', h);
+  
+  const migi = w - w/10,
+        hidari = w/10,
+        sita = h - h/10,
+        ue = h/10,
+        
+        itijikan = (migi - hidari)/12,//幅
+        itiniti = (sita-ue)/7,//高さ
+        padding = 10
+  
+  i = 0
+  for(jikann of [9,10,11,12,13,14,15,16,17,18,19,20,21]) {
+    memori = document.createElementNS("http://www.w3.org/2000/svg","line");
+    memori.setAttribute('x1', hidari+itijikan*i)
+    memori.setAttribute('x2', hidari+itijikan*i)
+    memori.setAttribute('y1', ue-padding)
+    memori.setAttribute('y2', ue+padding)
+    svg.appendChild(memori)
+
+    text = document.createElementNS("http://www.w3.org/2000/svg","text");
+    text.setAttribute('x', hidari+itijikan*i)
+    text.setAttribute('y', ue - padding*2)
+    text.setAttribute('text-anchor', "middle")
+    text.innerHTML = jikann
+    svg.appendChild(text)
+    i++
+  }
+  
+  i = 0
+  for(youbi of ["月","火","水","木","金","土","日"]) {
+    memori = document.createElementNS("http://www.w3.org/2000/svg","line");
+    memori.setAttribute('x1', hidari)
+    memori.setAttribute('x2', hidari)
+    memori.setAttribute('y1', ue+itiniti*i)
+    memori.setAttribute('y2', ue+itiniti*i+itiniti)
+    svg.appendChild(memori)
+
+    memori = document.createElementNS("http://www.w3.org/2000/svg","line");
+    memori.setAttribute('x1', hidari)
+    memori.setAttribute('x2', migi)
+    memori.setAttribute('y1', ue+itiniti*i)
+    memori.setAttribute('y2', ue+itiniti*i)
+    svg.appendChild(memori)
+
+    text = document.createElementNS("http://www.w3.org/2000/svg","text");
+    text.setAttribute('x', hidari-padding*3)
+    text.setAttribute('y', ue+itiniti*i+padding*4)
+    text.setAttribute('text-anchor', "middle")
+    text.innerHTML = youbi
+    svg.appendChild(text)
+    i++
+  }
+
+  const tatesen = document.createElementNS("http://www.w3.org/2000/svg","line");
+  tatesen.id = "tatesen"
+  tatesen.setAttribute('x1', hidari)
+  tatesen.setAttribute('x2', hidari)
+  tatesen.setAttribute('y1', ue)
+  tatesen.setAttribute('y2', sita)
+  svg.appendChild(tatesen)
+  
+  const tatesen2 = document.createElementNS("http://www.w3.org/2000/svg","line");
+  tatesen2.id = "tatesen2"
+  tatesen2.setAttribute('x1', migi)
+  tatesen2.setAttribute('x2', migi)
+  tatesen2.setAttribute('y1', ue)
+  tatesen2.setAttribute('y2', sita)
+  svg.appendChild(tatesen2)
+  
+  const yokosen = document.createElementNS("http://www.w3.org/2000/svg","line");
+  yokosen.id = "yokosen"
+  yokosen.setAttribute('x1', hidari)
+  yokosen.setAttribute('x2', migi)
+  yokosen.setAttribute('y1', ue)
+  yokosen.setAttribute('y2', ue)
+  svg.appendChild(yokosen)
+  
+  const yokosen2 = document.createElementNS("http://www.w3.org/2000/svg","line");
+  yokosen2.id = "yokosen2"
+  yokosen2.setAttribute('x1', hidari)
+  yokosen2.setAttribute('x2', migi)
+  yokosen2.setAttribute('y1', sita)
+  yokosen2.setAttribute('y2', sita)
+  svg.appendChild(yokosen2)
+  
+  //data = {"月":["0239",1,2,3,"0236",1,2,3],"火":["0239",4,5,6]}
+  function hyou(youbi, data) {
+    i = 0
+    for(staff_data in data) {
+      rect = document.createElementNS("http://www.w3.org/2000/svg","rect")  
+      obj = document.createElementNS("http://www.w3.org/2000/svg","foreignObject")
+      if(i/2 == 0) {
+        rect.setAttribute('y', ue+itiniti*youbi+itiniti/2)
+        obj.setAttribute('y', ue+itiniti*youbi+itiniti/2)
+      } else {
+        rect.setAttribute('y', ue+itiniti*youbi)
+        obj.setAttribute('y', ue+itiniti*youbi)
+      }
+      
+      staff_data = data[staff_data]
+      staffName = staffID[staff_data[0]]
+      start = staff_data[1]
+      kinnmujikann = staff_data.length - 1
+
+      rect.id = staffName
+      rect.setAttribute('x', hidari+itijikan*(start-1))
+      rect.setAttribute('height', itiniti/2)      
+      rect.setAttribute('width', itijikan*kinnmujikann)
+      svg.appendChild(rect)
+      
+      obj.setAttribute('x', hidari+itijikan*(start-1))
+      obj.setAttribute('height', itiniti/2)
+      obj.setAttribute('width', itijikan*kinnmujikann)
+      obj.innerHTML = `<div style="text-align:center;line-height:40px;"> ${staffName} </div>`
+      svg.appendChild(obj)
+
+      i++
+    }
+  }
+  
+  let data
+  let staffID
+  async function start() {
+    f1 = $.getJSON( "sample.json", function( data_ ) {
+      data = data_
+    })
+    f2 = $.getJSON( "StaffID.json", function( data_ ) {
+      staffID = data_
+    })
+    await Promise.all([f1,f2])
+    arr = arrayhenkann(data["月"])
+    hyou(0,arr)//月:0
+    arr = arrayhenkann(data["火"])
+    hyou(1,arr)
+    arr = arrayhenkann(data["水"])
+    hyou(2,arr)//月:0
+    arr = arrayhenkann(data["木"])
+    hyou(3,arr)
+    arr = arrayhenkann(data["金"])
+    hyou(4,arr)//月:0
+    // arr = arrayhenkann(data["土"])
+    // hyou(5,arr)
+    // arr = arrayhenkann(data["日"])
+    // hyou(6,arr)//月:0
+  }
+  
+  //data = {"月":["0239",1,2,3,"0236",1,2,3]}
+  //return arr = {0:["0239",1,2,3], 1:["0236",1,2,3]}   
+  function arrayhenkann(data) {
+    arr = {}
+    i = -1
+    for(el of data) {
+      console.log(el)
+      if(el.length == 4) {
+        i++
+        arr[i] = []
+        arr[i].push(el)
+      } else {
+        arr[i].push(el)
+      }
+    } 
+    return arr
+  }
+    
+  start()
+  
+</script>
+
