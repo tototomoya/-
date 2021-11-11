@@ -2,7 +2,7 @@
 	
 	概要
 
-		バックエンドでrubyプログラムを動かし、結果を保存したJSONファイルからJavaScriptで表を作成するアプリです。
+		rubyプログラムで作った勤怠データから、JavaScriptでグラフィカルな勤怠表を作成するアプリです。
 
 	ユースケース
 		
@@ -19,5 +19,5 @@
 サイトのURLは下記になります。
 https://savory-wide-stingray.glitch.me
 
-実際のコードは下記のURLから実行できます。
+下記のURLからコードを実行できます。
 https://glitch.com/edit/#!/savory-wide-stingray
